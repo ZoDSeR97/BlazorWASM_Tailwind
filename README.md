@@ -53,7 +53,7 @@ module.exports = {
   plugins: [],
 }
 ```
-Create a folder (inside Client folder) with a css file and put 3 Tailwindcss directive in there:
+Create a Styles folder (inside Client folder) with a css file and put 3 Tailwindcss directive in there:
 ```css
 @tailwind base;
 @tailwind components;
