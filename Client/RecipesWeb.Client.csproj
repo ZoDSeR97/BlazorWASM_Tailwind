@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.11" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shared\RecipesWeb.Shared.csproj" />
+  </ItemGroup>
+  
+  <Target Name="CheckNPMIsInstalled" BeforeTargets="InstallYarn">
+    <Exec Command="npm -v" ContinueOnError="true">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+
+    <Error Condition="'$(ErrorCode)' != '0'" Text="You must install npm" />
+  </Target>
+
+  <Target Name="InstallYarn" BeforeTargets="InstallDependencies">
+    <Exec Command="npm install -g yarn" />
+    <Touch Files="$(NpmLastInstall)" AlwaysCreate="true" />
+  </Target>
+
+  <Target Name="InstallDependencies" BeforeTargets="BuildTailwindCSS">
+    <Exec Command="yarn" />
+  </Target>
+
+  <Target Name="BuildTailwindCSS" BeforeTargets="Compile">
+    <Exec Command="yarn run buildcss" Condition="'$(Configuration)' == 'Debug'" />
+    <Exec Command="yarn run finalcss" Condition="'$(Configuration)' == 'Release'" />
+  </Target>
+  
+</Project>
